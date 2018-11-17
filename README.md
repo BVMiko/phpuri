@@ -1,11 +1,13 @@
-Phpuri
+PHPUri
 =========
+
+[![Build Status](https://travis-ci.com/TXC/phpuri.svg?branch=master)](https://travis-ci.com/TXC/phpuri)
 
 A php library for converting relative urls to absolute.
 
 ```php
-require 'phpuri.php';
-echo phpUri::parse('https://www.google.com/')->join('foo');
+require 'vendor/autoload.php';
+echo \TXC\PHPUri::parse('https://www.google.com/')->join('foo');
 //==> https://www.google.com/foo
 ```
 
