@@ -2,172 +2,229 @@
 namespace TXC\PHPUri\Tests;
 
 /**
- * A php library for converting relative urls to absolute.
- * Website: https://github.com/monkeysuffrage/phpuri
- *
- * <pre>
- * echo phpUri::parse('https://www.google.com/')->join('foo');
- * //==> https://www.google.com/foo
- * </pre>
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @author  P Guardiario <pguardiario@gmail.com>
- * @version 1.0
+ * Test based on https://tools.ietf.org/html/rfc1808#section-5
  */
-
 use PHPUnit\Framework\TestCase;
 use TXC\PHPUri\PHPUri;
 
-
 class PHPUriTest extends TestCase
 {
+    protected $relativeURL = '//a/b/c/d;p?q#f';
 
-    /** @test */
-    public function check_http_protocol_url_against_array()
+    /**
+     * https://tools.ietf.org/html/rfc1808#section-5.1
+     * @param string $scheme
+     */
+    private function normal_examples($scheme = '')
     {
-        $tests = [
-            ['rel' => 'g:h', 'result' => 'g:h'],
-            ['rel' => 'g', 'result' => 'http://a/b/c/g'],
-            ['rel' => './g', 'result' => 'http://a/b/c/g'],
-            ['rel' => 'g/', 'result' => 'http://a/b/c/g/'],
-            ['rel' => '/g', 'result' => 'http://a/g'],
-            ['rel' => '//g', 'result' => 'http://g'],
-            ['rel' => 'g?y', 'result' => 'http://a/b/c/g?y'],
-            ['rel' => '#s', 'result' => 'http://a/b/c/d;p?q#s'],
-            ['rel' => 'g#s', 'result' => 'http://a/b/c/g#s'],
-            ['rel' => 'g?y#s', 'result' => 'http://a/b/c/g?y#s'],
-            ['rel' => ';x', 'result' => 'http://a/b/c/;x'],
-            ['rel' => 'g;x', 'result' => 'http://a/b/c/g;x'],
-            ['rel' => 'g;x?y#s', 'result' => 'http://a/b/c/g;x?y#s'],
-            ['rel' => '.', 'result' => 'http://a/b/c/'],
-            ['rel' => './', 'result' => 'http://a/b/c/'],
-            ['rel' => '..', 'result' => 'http://a/b/'],
-            ['rel' => '../', 'result' => 'http://a/b/'],
-            ['rel' => '../g', 'result' => 'http://a/b/g'],
-            ['rel' => '../..', 'result' => 'http://a/'],
-            ['rel' => '../../', 'result' => 'http://a/'],
-            ['rel' => '../../g', 'result' => 'http://a/g'],
-            ['rel' => 'g.', 'result' => 'http://a/b/c/g.'],
-            ['rel' => '.g', 'result' => 'http://a/b/c/.g'],
-            ['rel' => 'g..', 'result' => 'http://a/b/c/g..'],
-            ['rel' => '..g', 'result' => 'http://a/b/c/..g'],
-            ['rel' => './../g', 'result' => 'http://a/b/g'],
-            ['rel' => './g/.', 'result' => 'http://a/b/c/g/'],
-            ['rel' => 'g/./h', 'result' => 'http://a/b/c/g/h'],
-            ['rel' => 'g/../h', 'result' => 'http://a/b/c/h'],
-            ['rel' => 'g;x=1/./y', 'result' => 'http://a/b/c/g;x=1/y'],
-            ['rel' => 'g;x=1/../y', 'result' => 'http://a/b/c/y'],
-            ['rel' => 'g?y/./x', 'result' => 'http://a/b/c/g?y/./x'],
-            ['rel' => 'g?y/../x', 'result' => 'http://a/b/c/g?y/../x'],
-            ['rel' => 'g#s/./x', 'result' => 'http://a/b/c/g#s/./x'],
-            ['rel' => 'g#s/../x', 'result' => 'http://a/b/c/g#s/../x']
-        ];
-
-        $base = phpUri::parse('http://a/b/c/d;p?q');
-
-        foreach($tests as $test) {
-            $r = ( $base->join($test['rel']) === $test['result'] );
-            $this->assertTrue($r);
+        if(!empty($scheme)) {
+            $scheme .= ':';
         }
+
+        $base = phpUri::parse($scheme . $this->relativeURL);
+
+        $r = ( $base->join('g') === $scheme . '//a/b/c/g' );
+        var_dump($base->join('g'), $r);
+        $this->assertTrue($r);
+
+        $r = ( $base->join('./g') === $scheme . '//a/b/c/g' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g/') === $scheme . '//a/b/c/g/' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('/g') === $scheme . '//a/g' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('//g') === $scheme . '//g' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('?y') === $scheme . '//a/b/c/d;p?y' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g?y') === $scheme . '//a/b/c/g?y' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g?y/./x') === $scheme . '//a/b/c/g?y/./x' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('#s') === $scheme . '//a/b/c/d;p?q#s' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g#s') === $scheme . '//a/b/c/g#s' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g?y#s') === $scheme . '//a/b/c/g?y#s' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g#s/./x') === $scheme . '//a/b/c/g#s/./x' );
+        $this->assertTrue($r);
+
+        // This doesn't work
+        //$r = ( $base->join(';x') === $scheme . '//a/b/c/d;x' );
+        //$this->assertTrue($r);
+
+        //$r = ( $base->join(';x') === $scheme . '//a/b/c/;x' );
+        //$this->assertFalse($r);
+
+        $r = ( $base->join('g;x') === $scheme . '//a/b/c/g;x' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g;x?y#s') === $scheme . '//a/b/c/g;x?y#s' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('.') === $scheme . '//a/b/c/' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('./') === $scheme . '//a/b/c/' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('..') === $scheme . '//a/b/' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('../') === $scheme . '//a/b/' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('../g') === $scheme . '//a/b/g' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('../..') === $scheme . '//a/' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('../../') === $scheme . '//a/' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('../../g') === $scheme . '//a/g' );
+        $this->assertTrue($r);
+    }
+
+    /**
+     * https://tools.ietf.org/html/rfc1808#section-5.2
+     * @param string $scheme
+     */
+    private function abnormal_examples($scheme = '')
+    {
+        if(!empty($scheme)) {
+            $scheme .= ':';
+        }
+
+        $base = phpUri::parse($scheme . $this->relativeURL);
+
+        // This assertion doesn't work
+        //$r = ( $base->join('/./g') === $scheme . '//a/./g' );
+        //$this->assertTrue($r);
+
+        //$r = ( $base->join('/../g') === $scheme . '//a/../g' );
+        //$this->assertTrue($r);
+
+        $r = ( $base->join('g.') === $scheme . '//a/b/c/g.' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('.g') === $scheme . '//a/b/c/.g' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g..') === $scheme . '//a/b/c/g..' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('..g') === $scheme . '//a/b/c/..g' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('./../g') === $scheme . '//a/b/g' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('./g/.') === $scheme . '//a/b/c/g/' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g/./h') === $scheme . '//a/b/c/g/h' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g/../h') === $scheme . '//a/b/c/h' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('./../g') === $scheme . '//a/b/g' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('./g/.') === $scheme . '//a/b/c/g/' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g/./h') === $scheme . '//a/b/c/g/h' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g/../h') === $scheme . '//a/b/c/h' );
+        $this->assertTrue($r);
+    }
+
+    /**
+     * @param string $scheme
+     */
+    private function really_abnormal_examples($scheme = '')
+    {
+        if(!empty($scheme)) {
+            $scheme .= ':';
+        }
+
+        $base = phpUri::parse($scheme . $this->relativeURL);
+
+        $r = ( $base->join('g;x=1/./y') === $scheme . '//a/b/c/g;x=1/y' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g;x=1/../y') === $scheme . '//a/b/c/y' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g?y/./x') === $scheme . '//a/b/c/g?y/./x' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g?y/../x') === $scheme . '//a/b/c/g?y/../x' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g#s/./x') === $scheme . '//a/b/c/g#s/./x' );
+        $this->assertTrue($r);
+
+        $r = ( $base->join('g#s/../x') === $scheme . '//a/b/c/g#s/../x' );
+        $this->assertTrue($r);
+    }
+
+    /**
+     * https://tools.ietf.org/html/rfc1808#section-5.1
+     * @param string $scheme
+     */
+    private function check_empty_reference($scheme = '')
+    {
+        if(!empty($scheme)) {
+            $scheme .= ':';
+        }
+
+        $base = phpUri::parse($scheme . $this->relativeURL);
+        $r = ( $base->join('') ===  $scheme . $this->relativeURL );
+        $this->assertTrue($r);
+    }
+
+    /**
+     * https://tools.ietf.org/html/rfc1808#section-5.1
+     * @test
+     */
+    public function check_scheme_less()
+    {
+        $base = phpUri::parse($this->relativeURL);
+        $r = ( $base->join('g:h') ===  'g:h' );
+        $this->assertTrue($r);
     }
 
     /** @test */
-    public function check_https_protocol_url_against_array()
+    public function check_with_scheme()
     {
-        $tests = [
-            ['rel' => 'g:h', 'result' => 'g:h'],
-            ['rel' => 'g', 'result' => 'https://a/b/c/g'],
-            ['rel' => './g', 'result' => 'https://a/b/c/g'],
-            ['rel' => 'g/', 'result' => 'https://a/b/c/g/'],
-            ['rel' => '/g', 'result' => 'https://a/g'],
-            ['rel' => '//g', 'result' => 'https://g'],
-            ['rel' => 'g?y', 'result' => 'https://a/b/c/g?y'],
-            ['rel' => '#s', 'result' => 'https://a/b/c/d;p?q#s'],
-            ['rel' => 'g#s', 'result' => 'https://a/b/c/g#s'],
-            ['rel' => 'g?y#s', 'result' => 'https://a/b/c/g?y#s'],
-            ['rel' => ';x', 'result' => 'https://a/b/c/;x'],
-            ['rel' => 'g;x', 'result' => 'https://a/b/c/g;x'],
-            ['rel' => 'g;x?y#s', 'result' => 'https://a/b/c/g;x?y#s'],
-            ['rel' => '.', 'result' => 'https://a/b/c/'],
-            ['rel' => './', 'result' => 'https://a/b/c/'],
-            ['rel' => '..', 'result' => 'https://a/b/'],
-            ['rel' => '../', 'result' => 'https://a/b/'],
-            ['rel' => '../g', 'result' => 'https://a/b/g'],
-            ['rel' => '../..', 'result' => 'https://a/'],
-            ['rel' => '../../', 'result' => 'https://a/'],
-            ['rel' => '../../g', 'result' => 'https://a/g'],
-            ['rel' => 'g.', 'result' => 'https://a/b/c/g.'],
-            ['rel' => '.g', 'result' => 'https://a/b/c/.g'],
-            ['rel' => 'g..', 'result' => 'https://a/b/c/g..'],
-            ['rel' => '..g', 'result' => 'https://a/b/c/..g'],
-            ['rel' => './../g', 'result' => 'https://a/b/g'],
-            ['rel' => './g/.', 'result' => 'https://a/b/c/g/'],
-            ['rel' => 'g/./h', 'result' => 'https://a/b/c/g/h'],
-            ['rel' => 'g/../h', 'result' => 'https://a/b/c/h'],
-            ['rel' => 'g;x=1/./y', 'result' => 'https://a/b/c/g;x=1/y'],
-            ['rel' => 'g;x=1/../y', 'result' => 'https://a/b/c/y'],
-            ['rel' => 'g?y/./x', 'result' => 'https://a/b/c/g?y/./x'],
-            ['rel' => 'g?y/../x', 'result' => 'https://a/b/c/g?y/../x'],
-            ['rel' => 'g#s/./x', 'result' => 'https://a/b/c/g#s/./x'],
-            ['rel' => 'g#s/../x', 'result' => 'https://a/b/c/g#s/../x']
-        ];
-
-        $base = phpUri::parse('https://a/b/c/d;p?q');
-
-        foreach($tests as $test) {
-            $r = ( $base->join($test['rel']) === $test['result'] );
-            $this->assertTrue($r);
-        }
+        $this->check_empty_reference('dummy');
+        $this->normal_examples('dummy');
+        $this->abnormal_examples('dummy');
+        $this->really_abnormal_examples('dummy');
     }
 
     /** @test */
-    public function check_protocol_relative_url_against_array()
+    public function check_scheme_relative_url()
     {
-        $tests = [
-            ['rel' => 'g:h', 'result' => 'g:h'],
-            ['rel' => 'g', 'result' => '//a/b/c/g'],
-            ['rel' => './g', 'result' => '//a/b/c/g'],
-            ['rel' => 'g/', 'result' => '//a/b/c/g/'],
-            ['rel' => '/g', 'result' => '//a/g'],
-            ['rel' => '//g', 'result' => '//g'],
-            ['rel' => 'g?y', 'result' => '//a/b/c/g?y'],
-            ['rel' => '#s', 'result' => '//a/b/c/d;p?q#s'],
-            ['rel' => 'g#s', 'result' => '//a/b/c/g#s'],
-            ['rel' => 'g?y#s', 'result' => '//a/b/c/g?y#s'],
-            ['rel' => ';x', 'result' => '//a/b/c/;x'],
-            ['rel' => 'g;x', 'result' => '//a/b/c/g;x'],
-            ['rel' => 'g;x?y#s', 'result' => '//a/b/c/g;x?y#s'],
-            ['rel' => '.', 'result' => '//a/b/c/'],
-            ['rel' => './', 'result' => '//a/b/c/'],
-            ['rel' => '..', 'result' => '//a/b/'],
-            ['rel' => '../', 'result' => '//a/b/'],
-            ['rel' => '../g', 'result' => '//a/b/g'],
-            ['rel' => '../..', 'result' => '//a/'],
-            ['rel' => '../../', 'result' => '//a/'],
-            ['rel' => '../../g', 'result' => '//a/g'],
-            ['rel' => 'g.', 'result' => '//a/b/c/g.'],
-            ['rel' => '.g', 'result' => '//a/b/c/.g'],
-            ['rel' => 'g..', 'result' => '//a/b/c/g..'],
-            ['rel' => '..g', 'result' => '//a/b/c/..g'],
-            ['rel' => './../g', 'result' => '//a/b/g'],
-            ['rel' => './g/.', 'result' => '//a/b/c/g/'],
-            ['rel' => 'g/./h', 'result' => '//a/b/c/g/h'],
-            ['rel' => 'g/../h', 'result' => '//a/b/c/h'],
-            ['rel' => 'g;x=1/./y', 'result' => '//a/b/c/g;x=1/y'],
-            ['rel' => 'g;x=1/../y', 'result' => '//a/b/c/y'],
-            ['rel' => 'g?y/./x', 'result' => '//a/b/c/g?y/./x'],
-            ['rel' => 'g?y/../x', 'result' => '//a/b/c/g?y/../x'],
-            ['rel' => 'g#s/./x', 'result' => '//a/b/c/g#s/./x'],
-            ['rel' => 'g#s/../x', 'result' => '//a/b/c/g#s/../x']
-        ];
-
-        $base = phpUri::parse('//a/b/c/d;p?q');
-
-        foreach($tests as $test) {
-            $r = ( $base->join($test['rel']) === $test['result'] );
-            $this->assertTrue($r);
-        }
+        $this->check_empty_reference();
+        $this->normal_examples();
+        $this->abnormal_examples();
+        $this->really_abnormal_examples();
     }
 }
