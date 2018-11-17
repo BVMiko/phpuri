@@ -1,11 +1,14 @@
 {
-    "name": "pguardiario/phpuri",
-	"type": "project",
-	"license": "MIT",
-    "description": "A php library for converting relative urls to absolute.",
-	"autoload" : {
-		"files": [
-			"phpuri.php"
-		]
-	}
+  "name": "txc/phpuri",
+  "type": "library",
+  "license": "MIT",
+  "description": "A php library for converting relative urls to absolute.",
+  "require-dev": {
+    "phpunit/phpunit": "^7"
+  },
+  "autoload": {
+    "psr-4": {
+      "TXC\\PHPUri\\": "src/"
+    }
+  }
 }
