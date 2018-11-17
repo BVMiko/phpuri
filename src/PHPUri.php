@@ -80,6 +80,9 @@ class PHPUri
         $this->fragment = $m[9][0];
     }
 
+    /**
+     * @return string
+     */
     public function toString()
     {
         $ret = '';
@@ -104,6 +107,10 @@ class PHPUri
         return $ret;
     }
 
+    /**
+     * @param string $path
+     * @return string
+     */
     private function normalize($path)
     {
         if (empty($path)) {
