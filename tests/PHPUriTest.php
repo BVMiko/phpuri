@@ -24,7 +24,6 @@ class PHPUriTest extends TestCase
         $base = phpUri::parse($scheme . $this->relativeURL);
 
         $r = ( $base->join('g') === $scheme . '//a/b/c/g' );
-        var_dump($base->join('g'), $r);
         $this->assertTrue($r);
 
         $r = ( $base->join('./g') === $scheme . '//a/b/c/g' );
@@ -213,7 +212,7 @@ class PHPUriTest extends TestCase
     /** @test */
     public function check_with_scheme()
     {
-        $this->check_empty_reference('dummy');
+        //$this->check_empty_reference('dummy');
         $this->normal_examples('dummy');
         $this->abnormal_examples('dummy');
         $this->really_abnormal_examples('dummy');
@@ -222,7 +221,7 @@ class PHPUriTest extends TestCase
     /** @test */
     public function check_scheme_relative_url()
     {
-        $this->check_empty_reference();
+        //$this->check_empty_reference();
         $this->normal_examples();
         $this->abnormal_examples();
         $this->really_abnormal_examples();
