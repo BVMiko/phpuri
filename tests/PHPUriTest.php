@@ -23,77 +23,77 @@ class PHPUriTest extends TestCase
 
         $base = phpUri::parse($scheme . $this->relativeURL);
 
-        $r = ( $base->join('g') === $scheme . '//a/b/c/g' );
+        $r = ( ((string)$base->join('g')) === $scheme . '//a/b/c/g' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('./g') === $scheme . '//a/b/c/g' );
+        $r = ( ((string)$base->join('./g')) === $scheme . '//a/b/c/g' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g/') === $scheme . '//a/b/c/g/' );
+        $r = ( ((string)$base->join('g/')) === $scheme . '//a/b/c/g/' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('/g') === $scheme . '//a/g' );
+        $r = ( ((string)$base->join('/g')) === $scheme . '//a/g' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('//g') === $scheme . '//g' );
+        $r = ( ((string)$base->join('//g')) === $scheme . '//g' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('?y') === $scheme . '//a/b/c/d;p?y' );
+        $r = ( ((string)$base->join('?y')) === $scheme . '//a/b/c/d;p?y' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g?y') === $scheme . '//a/b/c/g?y' );
+        $r = ( ((string)$base->join('g?y')) === $scheme . '//a/b/c/g?y' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g?y/./x') === $scheme . '//a/b/c/g?y/./x' );
+        $r = ( ((string)$base->join('g?y/./x')) === $scheme . '//a/b/c/g?y/./x' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('#s') === $scheme . '//a/b/c/d;p?q#s' );
+        $r = ( ((string)$base->join('#s')) === $scheme . '//a/b/c/d;p?q#s' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g#s') === $scheme . '//a/b/c/g#s' );
+        $r = ( ((string)$base->join('g#s')) === $scheme . '//a/b/c/g#s' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g?y#s') === $scheme . '//a/b/c/g?y#s' );
+        $r = ( ((string)$base->join('g?y#s')) === $scheme . '//a/b/c/g?y#s' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g#s/./x') === $scheme . '//a/b/c/g#s/./x' );
+        $r = ( ((string)$base->join('g#s/./x')) === $scheme . '//a/b/c/g#s/./x' );
         $this->assertTrue($r);
 
         // This doesn't work
-        //$r = ( $base->join(';x') === $scheme . '//a/b/c/d;x' );
+        //$r = ( ((string)$base->join(';x')) === $scheme . '//a/b/c/d;x' );
         //$this->assertTrue($r);
 
-        //$r = ( $base->join(';x') === $scheme . '//a/b/c/;x' );
+        //$r = ( ((string)$base->join(';x')) === $scheme . '//a/b/c/;x' );
         //$this->assertFalse($r);
 
-        $r = ( $base->join('g;x') === $scheme . '//a/b/c/g;x' );
+        $r = ( ((string)$base->join('g;x')) === $scheme . '//a/b/c/g;x' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g;x?y#s') === $scheme . '//a/b/c/g;x?y#s' );
+        $r = ( ((string)$base->join('g;x?y#s')) === $scheme . '//a/b/c/g;x?y#s' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('.') === $scheme . '//a/b/c/' );
+        $r = ( ((string)$base->join('.')) === $scheme . '//a/b/c/' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('./') === $scheme . '//a/b/c/' );
+        $r = ( ((string)$base->join('./')) === $scheme . '//a/b/c/' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('..') === $scheme . '//a/b/' );
+        $r = ( ((string)$base->join('..')) === $scheme . '//a/b/' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('../') === $scheme . '//a/b/' );
+        $r = ( ((string)$base->join('../')) === $scheme . '//a/b/' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('../g') === $scheme . '//a/b/g' );
+        $r = ( ((string)$base->join('../g')) === $scheme . '//a/b/g' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('../..') === $scheme . '//a/' );
+        $r = ( ((string)$base->join('../..')) === $scheme . '//a/' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('../../') === $scheme . '//a/' );
+        $r = ( ((string)$base->join('../../')) === $scheme . '//a/' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('../../g') === $scheme . '//a/g' );
+        $r = ( ((string)$base->join('../../g')) === $scheme . '//a/g' );
         $this->assertTrue($r);
     }
 
@@ -110,46 +110,46 @@ class PHPUriTest extends TestCase
         $base = phpUri::parse($scheme . $this->relativeURL);
 
         // This assertion doesn't work
-        //$r = ( $base->join('/./g') === $scheme . '//a/./g' );
+        //$r = ( ((string)$base->join('/./g')) === $scheme . '//a/./g' );
         //$this->assertTrue($r);
 
-        //$r = ( $base->join('/../g') === $scheme . '//a/../g' );
+        //$r = ( ((string)$base->join('/../g')) === $scheme . '//a/../g' );
         //$this->assertTrue($r);
 
-        $r = ( $base->join('g.') === $scheme . '//a/b/c/g.' );
+        $r = ( ((string)$base->join('g.')) === $scheme . '//a/b/c/g.' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('.g') === $scheme . '//a/b/c/.g' );
+        $r = ( ((string)$base->join('.g')) === $scheme . '//a/b/c/.g' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g..') === $scheme . '//a/b/c/g..' );
+        $r = ( ((string)$base->join('g..')) === $scheme . '//a/b/c/g..' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('..g') === $scheme . '//a/b/c/..g' );
+        $r = ( ((string)$base->join('..g')) === $scheme . '//a/b/c/..g' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('./../g') === $scheme . '//a/b/g' );
+        $r = ( ((string)$base->join('./../g')) === $scheme . '//a/b/g' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('./g/.') === $scheme . '//a/b/c/g/' );
+        $r = ( ((string)$base->join('./g/.')) === $scheme . '//a/b/c/g/' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g/./h') === $scheme . '//a/b/c/g/h' );
+        $r = ( ((string)$base->join('g/./h')) === $scheme . '//a/b/c/g/h' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g/../h') === $scheme . '//a/b/c/h' );
+        $r = ( ((string)$base->join('g/../h')) === $scheme . '//a/b/c/h' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('./../g') === $scheme . '//a/b/g' );
+        $r = ( ((string)$base->join('./../g')) === $scheme . '//a/b/g' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('./g/.') === $scheme . '//a/b/c/g/' );
+        $r = ( ((string)$base->join('./g/.')) === $scheme . '//a/b/c/g/' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g/./h') === $scheme . '//a/b/c/g/h' );
+        $r = ( ((string)$base->join('g/./h')) === $scheme . '//a/b/c/g/h' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g/../h') === $scheme . '//a/b/c/h' );
+        $r = ( ((string)$base->join('g/../h')) === $scheme . '//a/b/c/h' );
         $this->assertTrue($r);
     }
 
@@ -164,22 +164,22 @@ class PHPUriTest extends TestCase
 
         $base = phpUri::parse($scheme . $this->relativeURL);
 
-        $r = ( $base->join('g;x=1/./y') === $scheme . '//a/b/c/g;x=1/y' );
+        $r = ( ((string)$base->join('g;x=1/./y')) === $scheme . '//a/b/c/g;x=1/y' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g;x=1/../y') === $scheme . '//a/b/c/y' );
+        $r = ( ((string)$base->join('g;x=1/../y')) === $scheme . '//a/b/c/y' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g?y/./x') === $scheme . '//a/b/c/g?y/./x' );
+        $r = ( ((string)$base->join('g?y/./x')) === $scheme . '//a/b/c/g?y/./x' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g?y/../x') === $scheme . '//a/b/c/g?y/../x' );
+        $r = ( ((string)$base->join('g?y/../x')) === $scheme . '//a/b/c/g?y/../x' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g#s/./x') === $scheme . '//a/b/c/g#s/./x' );
+        $r = ( ((string)$base->join('g#s/./x')) === $scheme . '//a/b/c/g#s/./x' );
         $this->assertTrue($r);
 
-        $r = ( $base->join('g#s/../x') === $scheme . '//a/b/c/g#s/../x' );
+        $r = ( ((string)$base->join('g#s/../x')) === $scheme . '//a/b/c/g#s/../x' );
         $this->assertTrue($r);
     }
 
@@ -194,7 +194,7 @@ class PHPUriTest extends TestCase
         }
 
         $base = phpUri::parse($scheme . $this->relativeURL);
-        $r = ( $base->join('') ===  $scheme . $this->relativeURL );
+        $r = ( ((string)$base->join('')) ===  $scheme . $this->relativeURL );
         $this->assertTrue($r);
     }
 
@@ -205,7 +205,7 @@ class PHPUriTest extends TestCase
     public function check_scheme_less()
     {
         $base = phpUri::parse($this->relativeURL);
-        $r = ( $base->join('g:h') ===  'g:h' );
+        $r = ( ((string)$base->join('g:h')) ===  'g:h' );
         $this->assertTrue($r);
     }
 
