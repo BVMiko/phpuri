@@ -5,7 +5,7 @@ namespace TXC\PHPUri;
  * Website: https://github.com/monkeysuffrage/phpuri
  *
  * <pre>
- * echo phpUri::parse('https://www.google.com/')->join('foo');
+ * echo PHPUri::parse('https://www.google.com/')->join('foo');
  * //==> https://www.google.com/foo
  * </pre>
  *
@@ -161,7 +161,7 @@ class PHPUri
      *
      * @param string $url the url to parse
      *
-     * @return phpUri
+     * @return PHPUri
      */
     public static function parse($url)
     {
@@ -185,7 +185,7 @@ class PHPUri
      *
      * @param string $relative the relative url to join
      *
-     * @return string
+     * @return PHPUri
      */
     public function join($relative)
     {
@@ -231,6 +231,6 @@ class PHPUri
             }
         }
 
-        return $uri->toString();
+        return $uri;
     }
 }
