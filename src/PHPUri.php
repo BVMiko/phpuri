@@ -56,7 +56,7 @@ class PHPUri
      * PHPUri constructor.
      * @param string $string
      */
-    private function __construct($string)
+    public function __construct($string)
     {
         preg_match_all(
             '/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/',
@@ -94,7 +94,12 @@ class PHPUri
             $ret .= "//{$this->authority}";
         }
 
-        $ret .= $this->normalize($this->path);
+        $path = $this->normalize($this->path);
+        if (!empty($path)) {
+            $ret .= $path;
+        } else {
+            $ret .= '/';
+        }
 
         if (!empty($this->query)) {
             $ret .= "?{$this->query}";
@@ -165,19 +170,7 @@ class PHPUri
      */
     public static function parse($url)
     {
-        $uri = new self($url);
-
-        /**
-         * CHANGE:
-         * @author Dominik Habichtsberg <Dominik.Habichtsberg@Hbg-IT.de>
-         * @since  24 Mai 2015 10:25 Uhr
-         * The base-url should always have a path
-         */
-        if (empty($uri->path)) {
-            $uri->path = '/';
-        }
-
-        return $uri;
+        return new self($url);
     }
 
     /**
