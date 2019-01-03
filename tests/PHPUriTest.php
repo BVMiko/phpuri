@@ -35,8 +35,11 @@ class PHPUriTest extends TestCase
         $r = ( ((string)$base->join('/g')) === $scheme . '//a/g' );
         $this->assertTrue($r);
 
-        $r = ( ((string)$base->join('//g')) === $scheme . '//g' );
-        $this->assertTrue($r);
+        // We're explicitly disagreeing with this one; fold all non-trailing-slash
+        //   bare domains into their trailing-slash counterpart, e.g.
+        //   https://www.google.com --> https://www.google.com/
+        // $r = ( ((string)$base->join('//g')) === $scheme . '//g' );
+        // $this->assertTrue($r);
 
         $r = ( ((string)$base->join('?y')) === $scheme . '//a/b/c/d;p?y' );
         $this->assertTrue($r);
