@@ -83,7 +83,7 @@ class PHPUri
     /**
      * @return string
      */
-    public function toString()
+    public function __toString()
     {
         $ret = '';
         if (!empty($this->scheme)) {
