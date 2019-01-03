@@ -1,7 +1,7 @@
 PHPUri
 =========
 
-[![Build Status](https://travis-ci.com/TXC/phpuri.svg?branch=master)](https://travis-ci.com/TXC/phpuri)
+[![Build Status](https://travis-ci.com/BVMiko/phpuri.svg?branch=master)](https://travis-ci.com/BVMiko/phpuri)
 
 A php library for converting relative urls to absolute.
 
